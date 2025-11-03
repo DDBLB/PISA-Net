@@ -12,7 +12,7 @@ from matplotlib import rcParams
 import csv
 import torch.nn.functional as F
 
-def denormalize_field(tensor, T_max=400.0, U_max=0.05, V_max=0.025):
+def denormalize_field(tensor, T_max=1.0, U_max=0.5, V_max=0.25):
     """
     将归一化后的 T, U, V 恢复为有量纲值
     输入：
@@ -211,13 +211,6 @@ def main():
     best_model_path = "best_model.pth"
 
     for epoch in range(1, 501):
-        # 200前不加，200-250逐渐加到0.1
-        if epoch < 200:
-            weight_phys_energy = 0.0
-        elif epoch < 250:
-            weight_phys_energy = 0.00 * (epoch - 200) / 50
-        else:
-            weight_phys_energy = 0.00
 
         losses = train_one_epoch(model, dataloader, optimizer, device,
                                  weight_T, weight_U, weight_V,
@@ -303,3 +296,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
